@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --color-racing-green: #004225;
+  --color-racing-green-dark: #002a15;
+  --color-cream: #fcf9f8;
+  --color-chrome: #c0c9c0;
+  --color-obsidian: #1c1b1b;
+  
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-obsidian);
+  }
+}
+
+@layer utilities {
+  .font-serif {
+    font-family: var(--font-serif), serif;
+  }
+  .font-sans {
+    font-family: var(--font-sans), sans-serif;
+  }
+}
