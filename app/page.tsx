@@ -122,50 +122,117 @@ const FleetCard = ({ image, name, subtitle, year, engine, detail, detailLabel }:
   </motion.div>
 );
 
-const FleetSection = () => (
-  <section className="py-20 lg:py-32 bg-cream">
-    <div className="max-w-7xl mx-auto px-6 lg:px-12">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
-        <div>
-          <span className="font-sans font-bold text-xs text-racing-green block mb-2 tracking-[0.2em] uppercase">CURATED COLLECTION</span>
-          <h2 className="font-serif text-4xl lg:text-5xl font-semibold">The Fleet</h2>
+const FleetSection = () => {
+  const [activeFilters, setActiveFilters] = React.useState({
+    year: 'All',
+    make: 'All',
+  });
+
+  const fleetData = [
+    { 
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDPy7dc8c9P8Stt_FZl6VN1QUFFxgeqjvZqaoa84oqcFzra8kOj3qYjrWkwVUtVmoGm8CewGiF3oF84yE3m2IsRVmaCbrxcM87vA4xDapREByf7bGS_YkmssbfJ7cKFhTwKCjTpTPqaIKJQYujB67qURyX_ZUpQfjMo25lnrHi61vKm9edQGvxhy6bBMngcPHpqOM5RA7Ne2fdfkCY882e_Zu1S7PhwitHW5T498nWdcDnTREUTkuor-TVw0toUcHCbM4aXc1WQ0w",
+      name: "Jaguar E-Type",
+      make: "Jaguar",
+      subtitle: "Series 1 Fixed Head Coupe",
+      year: "1963",
+      engine: "3.8L Straight-6",
+      detail: "4-Speed Manual",
+      detailLabel: "TRANSMISSION"
+    },
+    { 
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDO62v8QcXEi6Gb3AQVSs7expwjsfEIi7tXQwloizLhNm822NqhNubUrrSsXqBlndfiaBhtI-2w4DyFMhAeDCzubx6ZS78yhpezE-nAuKFqqp25J4dxtPh-zQLNx1t9rNA0g6XD6a2IQunXf04pZ4aEIIu3jduw8W_GrMoDh2KUKxk43dsRga1r-7JxnPct_ySHZJ5YK7pdUXQWkebyxiKodIfJU8uvnz1UjBoHeQCtp5VwlCvMYpXNWTFZVKbNg5SgofmBbNhrPw",
+      name: "Porsche 911 RS",
+      make: "Porsche",
+      subtitle: "Carrera 2.7 Lightweight",
+      year: "1974",
+      engine: "2.7L Flat-6",
+      detail: "975 kg",
+      detailLabel: "WEIGHT"
+    },
+    { 
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAvJr86sU_SbwoScprGIzaBmdkC3CShkbR2Pspy57kF4Lp7xlRJaIEkhEHo0w4sreWiDc4UcNdowqtkYznBbzg0H7bQoJJagN9izxe4gxLpGPwx9sNKcYUYfX3VaC1nb2TVyuIhrizjlk4VWwvvpXoAJPE6cgGPiTPKwvYZh5JWihwe7LLxZT8QW3GQ_oUKYvgu-CR-pgfJh9XHs64k9H1OvaYp3QXctYdMJcPdP4Xj8-uf-twGlo-i0U-ncJVupTSoqhtZ3IgRLA",
+      name: "Mercedes 300SL",
+      make: "Mercedes",
+      subtitle: "W198 Roadster",
+      year: "1961",
+      engine: "146 MPH",
+      detail: "Fully Restored",
+      detailLabel: "PROVENANCE"
+    }
+  ];
+
+  const filteredFleet = fleetData.filter(car => {
+    return (activeFilters.year === 'All' || car.year === activeFilters.year) &&
+           (activeFilters.make === 'All' || car.make === activeFilters.make);
+  });
+
+  const years = ['All', ...new Set(fleetData.map(car => car.year))];
+  const makes = ['All', ...new Set(fleetData.map(car => car.make))];
+
+  return (
+    <section className="py-20 lg:py-32 bg-cream">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-8">
+          <div>
+            <span className="font-sans font-bold text-xs text-racing-green block mb-2 tracking-[0.2em] uppercase">CURATED COLLECTION</span>
+            <h2 className="font-serif text-4xl lg:text-5xl font-semibold mb-4">The Fleet</h2>
+            <div className="flex flex-wrap gap-4 mt-6">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-sans font-bold text-stone-400 uppercase tracking-widest">Year</label>
+                <select 
+                  className="bg-white border border-stone-200 px-4 py-2 text-sm font-sans focus:border-racing-green outline-none min-w-[120px]"
+                  value={activeFilters.year}
+                  onChange={(e) => setActiveFilters({ ...activeFilters, year: e.target.value })}
+                >
+                  {years.sort().map(year => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-sans font-bold text-stone-400 uppercase tracking-widest">Make</label>
+                <select 
+                  className="bg-white border border-stone-200 px-4 py-2 text-sm font-sans focus:border-racing-green outline-none min-w-[120px]"
+                  value={activeFilters.make}
+                  onChange={(e) => setActiveFilters({ ...activeFilters, make: e.target.value })}
+                >
+                  {makes.sort().map(make => (
+                    <option key={make} value={make}>{make}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+          <a className="font-sans font-bold text-xs text-stone-500 hover:text-racing-green border-b border-stone-300 pb-1 tracking-[0.15em] uppercase transition-colors" href="#">
+            View Entire Registry
+          </a>
         </div>
-        <a className="font-sans font-bold text-xs text-stone-500 hover:text-racing-green border-b border-stone-300 pb-1 tracking-[0.15em] uppercase transition-colors" href="#">
-          View Entire Registry
-        </a>
+        <motion.div 
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {filteredFleet.map((car, idx) => (
+            <motion.div
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.4 }}
+              key={car.name}
+            >
+              <FleetCard {...car} />
+            </motion.div>
+          ))}
+          {filteredFleet.length === 0 && (
+            <div className="col-span-full py-20 text-center">
+              <p className="font-serif italic text-stone-500 text-lg">No vehicles found matching your criteria.</p>
+            </div>
+          )}
+        </motion.div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <FleetCard 
-          image="https://lh3.googleusercontent.com/aida-public/AB6AXuDPy7dc8c9P8Stt_FZl6VN1QUFFxgeqjvZqaoa84oqcFzra8kOj3qYjrWkwVUtVmoGm8CewGiF3oF84yE3m2IsRVmaCbrxcM87vA4xDapREByf7bGS_YkmssbfJ7cKFhTwKCjTpTPqaIKJQYujB67qURyX_ZUpQfjMo25lnrHi61vKm9edQGvxhy6bBMngcPHpqOM5RA7Ne2fdfkCY882e_Zu1S7PhwitHW5T498nWdcDnTREUTkuor-TVw0toUcHCbM4aXc1WQ0w"
-          name="Jaguar E-Type"
-          subtitle="Series 1 Fixed Head Coupe"
-          year="1963"
-          engine="3.8L Straight-6"
-          detail="4-Speed Manual"
-          detailLabel="TRANSMISSION"
-        />
-        <FleetCard 
-          image="https://lh3.googleusercontent.com/aida-public/AB6AXuDO62v8QcXEi6Gb3AQVSs7expwjsfEIi7tXQwloizLhNm822NqhNubUrrSsXqBlndfiaBhtI-2w4DyFMhAeDCzubx6ZS78yhpezE-nAuKFqqp25J4dxtPh-zQLNx1t9rNA0g6XD6a2IQunXf04pZ4aEIIu3jduw8W_GrMoDh2KUKxk43dsRga1r-7JxnPct_ySHZJ5YK7pdUXQWkebyxiKodIfJU8uvnz1UjBoHeQCtp5VwlCvMYpXNWTFZVKbNg5SgofmBbNhrPw"
-          name="Porsche 911 RS"
-          subtitle="Carrera 2.7 Lightweight"
-          year="1974"
-          engine="2.7L Flat-6"
-          detail="975 kg"
-          detailLabel="WEIGHT"
-        />
-        <FleetCard 
-          image="https://lh3.googleusercontent.com/aida-public/AB6AXuAvJr86sU_SbwoScprGIzaBmdkC3CShkbR2Pspy57kF4Lp7xlRJaIEkhEHo0w4sreWiDc4UcNdowqtkYznBbzg0H7bQoJJagN9izxe4gxLpGPwx9sNKcYUYfX3VaC1nb2TVyuIhrizjlk4VWwvvpXoAJPE6cgGPiTPKwvYZh5JWihwe7LLxZT8QW3GQ_oUKYvgu-CR-pgfJh9XHs64k9H1OvaYp3QXctYdMJcPdP4Xj8-uf-twGlo-i0U-ncJVupTSoqhtZ3IgRLA"
-          name="Mercedes 300SL"
-          subtitle="W198 Roadster"
-          year="1961"
-          engine="146 MPH"
-          detail="Fully Restored"
-          detailLabel="PROVENANCE"
-        />
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const StorySection = () => (
   <section className="py-20 lg:py-32 bg-stone-100 overflow-hidden">
